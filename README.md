@@ -137,7 +137,7 @@ Create a `.env` file in the project folder with the required database settings:
 
 ```env
 POSTGRES_USER=user
-POSTGRES_PASSWORD=change_me
+POSTGRES_PASSWORD=replace_with_your_local_password
 POSTGRES_DB=traindb
 DB_HOST=localhost
 DB_PORT=5432
