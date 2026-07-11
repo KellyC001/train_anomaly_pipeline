@@ -6,3 +6,7 @@ scikit-learn>=1.4.0
 streamlit>=1.32.0
 pandas>=2.2.0
 numpy>=1.26.0
+requests>=2.31.0
+pytest>=8.0.0
+prefect>=3.7.0
+plotly>=6.0.0

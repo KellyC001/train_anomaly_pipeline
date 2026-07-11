@@ -1,0 +1,192 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1100" viewBox="0 0 1800 1100">
+  <defs>
+    <style>
+      .title { font: 700 46px Arial, sans-serif; fill: #162033; }
+      .subtitle { font: 400 25px Arial, sans-serif; fill: #445064; }
+      .layer-title { font: 700 22px Arial, sans-serif; fill: #172033; }
+      .box-title { font: 700 20px Arial, sans-serif; fill: #172033; }
+      .box-text { font: 400 16px Arial, sans-serif; fill: #374151; }
+      .small { font: 400 14px Arial, sans-serif; fill: #4b5563; }
+      .label { font: 700 14px Arial, sans-serif; fill: #374151; }
+      .planned { font: 700 14px Arial, sans-serif; fill: #7c3aed; }
+      .box { fill: #ffffff; stroke: #446b8f; stroke-width: 2.5; rx: 14; }
+      .layer-blue { fill: #edf7fb; stroke: #c3dced; stroke-width: 2; rx: 18; }
+      .layer-green { fill: #f0fbf5; stroke: #bee3cf; stroke-width: 2; rx: 18; }
+      .layer-purple { fill: #f6f0ff; stroke: #d7c6f3; stroke-width: 2; rx: 18; }
+      .layer-orange { fill: #fff8ee; stroke: #ead3ad; stroke-width: 2; rx: 18; }
+      .arrow { stroke: #31526f; stroke-width: 3; fill: none; marker-end: url(#arrowhead); stroke-linecap: round; stroke-linejoin: round; }
+      .control { stroke: #7c3aed; stroke-width: 3; fill: none; marker-end: url(#arrowhead-purple); stroke-dasharray: 8 7; stroke-linecap: round; stroke-linejoin: round; }
+      .future { stroke: #7c3aed; stroke-width: 2.5; fill: none; marker-end: url(#arrowhead-purple); stroke-dasharray: 7 7; stroke-linecap: round; stroke-linejoin: round; }
+      .pill { fill: #f3f6fa; stroke: #d6dde8; stroke-width: 1.5; rx: 18; }
+    </style>
+    <marker id="arrowhead" markerWidth="7" markerHeight="6" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#31526f"/>
+    </marker>
+    <marker id="arrowhead-purple" markerWidth="7" markerHeight="6" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#7c3aed"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1800" height="1100" fill="#f8fbff"/>
+  <text x="900" y="58" text-anchor="middle" class="title">RailOps AI: End-to-End Anomaly Detection Architecture</text>
+  <text x="900" y="96" text-anchor="middle" class="subtitle">Streaming telemetry, anomaly inference, live dashboarding, orchestration, and AI-ready diagnostics</text>
+
+  <!-- Top pipeline layers -->
+  <rect x="55" y="145" width="500" height="300" class="layer-blue"/>
+  <text x="82" y="184" class="layer-title">Layer 1: Data Ingestion and Streaming</text>
+
+  <rect x="85" y="220" width="170" height="135" class="box"/>
+  <text x="170" y="255" text-anchor="middle" class="box-title">Producer</text>
+  <text x="170" y="282" text-anchor="middle" class="box-text">Fake train door</text>
+  <text x="170" y="304" text-anchor="middle" class="box-text">sensor readings</text>
+  <text x="170" y="330" text-anchor="middle" class="small">producer.py</text>
+
+  <rect x="345" y="220" width="175" height="135" class="box"/>
+  <text x="432" y="255" text-anchor="middle" class="box-title">Kafka</text>
+  <text x="432" y="282" text-anchor="middle" class="box-text">Message broker</text>
+  <text x="432" y="304" text-anchor="middle" class="box-text">topic: train-doors</text>
+  <text x="432" y="330" text-anchor="middle" class="small">port 9092</text>
+
+  <line x1="255" y1="287" x2="345" y2="287" class="arrow"/>
+  <text x="300" y="270" text-anchor="middle" class="label">publish</text>
+
+  <rect x="580" y="145" width="505" height="300" class="layer-green"/>
+  <text x="607" y="184" class="layer-title">Layer 2: Processing and ML Inference</text>
+
+  <rect x="625" y="220" width="205" height="150" class="box"/>
+  <text x="727" y="255" text-anchor="middle" class="box-title">Consumer Worker</text>
+  <text x="727" y="282" text-anchor="middle" class="box-text">Reads Kafka messages</text>
+  <text x="727" y="304" text-anchor="middle" class="box-text">scores anomalies</text>
+  <text x="727" y="330" text-anchor="middle" class="small">consumer.py</text>
+
+  <rect x="860" y="220" width="185" height="150" class="box"/>
+  <text x="952" y="255" text-anchor="middle" class="box-title">Anomaly Model</text>
+  <text x="952" y="282" text-anchor="middle" class="box-text">Isolation Forest</text>
+  <text x="952" y="304" text-anchor="middle" class="box-text">+ safety thresholds</text>
+  <text x="952" y="330" text-anchor="middle" class="small">src/anomaly_model.py</text>
+
+  <line x1="520" y1="287" x2="625" y2="287" class="arrow"/>
+  <line x1="830" y1="287" x2="860" y2="287" class="arrow"/>
+  <text x="572" y="270" text-anchor="middle" class="label">consume</text>
+
+  <rect x="1110" y="145" width="275" height="300" class="layer-blue"/>
+  <text x="1137" y="184" class="layer-title">Layer 3: Source of Truth</text>
+
+  <rect x="1160" y="230" width="180" height="135" class="box"/>
+  <text x="1250" y="265" text-anchor="middle" class="box-title">PostgreSQL</text>
+  <text x="1250" y="292" text-anchor="middle" class="box-text">Stores processed</text>
+  <text x="1250" y="314" text-anchor="middle" class="box-text">telemetry results</text>
+  <text x="1250" y="340" text-anchor="middle" class="small">sensor_logs table</text>
+
+  <line x1="1045" y1="295" x2="1160" y2="295" class="arrow"/>
+  <text x="1100" y="278" text-anchor="middle" class="label">insert</text>
+
+  <rect x="1410" y="145" width="335" height="300" class="layer-purple"/>
+  <text x="1437" y="184" class="layer-title">Layer 4: Presentation and Interaction</text>
+
+  <rect x="1445" y="220" width="125" height="150" class="box"/>
+  <text x="1507" y="255" text-anchor="middle" class="box-title">Streamlit</text>
+  <text x="1507" y="282" text-anchor="middle" class="box-text">Manager and</text>
+  <text x="1507" y="304" text-anchor="middle" class="box-text">analyst dashboard</text>
+  <text x="1507" y="330" text-anchor="middle" class="small">Plotly charts</text>
+
+  <rect x="1595" y="220" width="120" height="150" class="box"/>
+  <text x="1655" y="255" text-anchor="middle" class="box-title">FastAPI</text>
+  <text x="1655" y="282" text-anchor="middle" class="box-text">Diagnostic</text>
+  <text x="1655" y="304" text-anchor="middle" class="box-text">tool server</text>
+  <text x="1655" y="330" text-anchor="middle" class="small">port 8000</text>
+
+  <line x1="1340" y1="295" x2="1445" y2="295" class="arrow"/>
+  <line x1="1340" y1="330" x2="1595" y2="330" class="arrow"/>
+  <text x="1395" y="279" text-anchor="middle" class="label">query</text>
+
+  <!-- Orchestration layer -->
+  <rect x="55" y="490" width="1030" height="280" class="layer-orange"/>
+  <text x="82" y="529" class="layer-title">Layer 5: Orchestration and Monitoring</text>
+
+  <rect x="105" y="585" width="210" height="125" class="box"/>
+  <text x="210" y="620" text-anchor="middle" class="box-title">Prefect Flows</text>
+  <text x="210" y="647" text-anchor="middle" class="box-text">Scheduled checks</text>
+  <text x="210" y="669" text-anchor="middle" class="box-text">and retries</text>
+  <text x="210" y="695" text-anchor="middle" class="small">orchestration.py</text>
+
+  <rect x="365" y="555" width="215" height="170" class="box"/>
+  <text x="472" y="590" text-anchor="middle" class="box-title">Operations Reports</text>
+  <text x="472" y="617" text-anchor="middle" class="box-text">Anomaly summary</text>
+  <text x="472" y="639" text-anchor="middle" class="box-text">Data quality</text>
+  <text x="472" y="661" text-anchor="middle" class="box-text">Model health</text>
+  <text x="472" y="695" text-anchor="middle" class="small">reports/*.json</text>
+
+  <rect x="630" y="555" width="220" height="170" class="box"/>
+  <text x="740" y="590" text-anchor="middle" class="box-title">Monitoring Health</text>
+  <text x="740" y="617" text-anchor="middle" class="box-text">Missing values</text>
+  <text x="740" y="639" text-anchor="middle" class="box-text">Duplicates</text>
+  <text x="740" y="661" text-anchor="middle" class="box-text">Invalid ranges</text>
+  <text x="740" y="695" text-anchor="middle" class="small">dashboard tab</text>
+
+  <rect x="900" y="555" width="145" height="170" class="box"/>
+  <text x="972" y="590" text-anchor="middle" class="box-title">Tests</text>
+  <text x="972" y="617" text-anchor="middle" class="box-text">15 passing</text>
+  <text x="972" y="639" text-anchor="middle" class="box-text">unit tests</text>
+  <text x="972" y="695" text-anchor="middle" class="small">pytest</text>
+
+  <line x1="1250" y1="365" x2="210" y2="585" class="control"/>
+  <line x1="315" y1="647" x2="365" y2="647" class="arrow"/>
+  <line x1="580" y1="647" x2="630" y2="647" class="arrow"/>
+  <line x1="472" y1="555" x2="1507" y2="370" class="control"/>
+
+  <!-- AI-ready layer -->
+  <rect x="1110" y="490" width="635" height="280" class="layer-purple"/>
+  <text x="1137" y="529" class="layer-title">Layer 6: AI-Ready Diagnostics</text>
+
+  <rect x="1160" y="580" width="180" height="125" class="box"/>
+  <text x="1250" y="615" text-anchor="middle" class="box-title">Tool Calling</text>
+  <text x="1250" y="642" text-anchor="middle" class="box-text">Recent faults</text>
+  <text x="1250" y="664" text-anchor="middle" class="box-text">Maintenance notes</text>
+  <text x="1250" y="690" text-anchor="middle" class="small">FastAPI endpoints</text>
+
+  <rect x="1395" y="580" width="180" height="125" class="box"/>
+  <text x="1485" y="615" text-anchor="middle" class="box-title">Future LLM Agent</text>
+  <text x="1485" y="642" text-anchor="middle" class="box-text">Summarizes faults</text>
+  <text x="1485" y="664" text-anchor="middle" class="box-text">and recommends action</text>
+  <text x="1485" y="690" text-anchor="middle" class="planned">planned</text>
+
+  <line x1="1595" y1="330" x2="1250" y2="580" class="arrow"/>
+  <line x1="1340" y1="642" x2="1395" y2="642" class="future"/>
+
+  <!-- Infrastructure layer -->
+  <rect x="55" y="815" width="1690" height="210" class="layer-blue"/>
+  <text x="82" y="854" class="layer-title">Infrastructure and Local Runtime</text>
+
+  <rect x="110" y="895" width="210" height="80" class="pill"/>
+  <text x="215" y="928" text-anchor="middle" class="box-title">Docker Compose</text>
+  <text x="215" y="953" text-anchor="middle" class="box-text">Kafka, Zookeeper, PostgreSQL</text>
+
+  <rect x="375" y="895" width="210" height="80" class="pill"/>
+  <text x="480" y="928" text-anchor="middle" class="box-title">Python Entrypoints</text>
+  <text x="480" y="953" text-anchor="middle" class="box-text">producer, consumer, API, dashboard</text>
+
+  <rect x="640" y="895" width="210" height="80" class="pill"/>
+  <text x="745" y="928" text-anchor="middle" class="box-title">Reusable Modules</text>
+  <text x="745" y="953" text-anchor="middle" class="box-text">src/* logic and tests</text>
+
+  <rect x="905" y="895" width="210" height="80" class="pill"/>
+  <text x="1010" y="928" text-anchor="middle" class="box-title">GitLab/GitHub</text>
+  <text x="1010" y="953" text-anchor="middle" class="box-text">README, docs, architecture slide</text>
+
+  <rect x="1170" y="895" width="230" height="80" class="pill"/>
+  <text x="1285" y="928" text-anchor="middle" class="box-title">CI/CD</text>
+  <text x="1285" y="953" text-anchor="middle" class="planned">planned: tests and deploy checks</text>
+
+  <rect x="1455" y="895" width="230" height="80" class="pill"/>
+  <text x="1570" y="928" text-anchor="middle" class="box-title">Cloud Ready</text>
+  <text x="1570" y="953" text-anchor="middle" class="planned">planned: managed runtime</text>
+
+  <!-- Legend -->
+  <rect x="1215" y="1038" width="20" height="20" fill="#edf7fb" stroke="#c3dced"/>
+  <text x="1245" y="1054" class="small">Implemented local system</text>
+  <rect x="1435" y="1038" width="20" height="20" fill="#f6f0ff" stroke="#d7c6f3"/>
+  <text x="1465" y="1054" class="small">AI/planned extension</text>
+  <line x1="1615" y1="1048" x2="1660" y2="1048" class="control"/>
+  <text x="1675" y="1054" class="small">Control/report flow</text>
+</svg>
