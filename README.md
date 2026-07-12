@@ -1,5 +1,7 @@
 # RailOps AI: Train Anomaly Pipeline
 
+<img width="2816" height="1536" alt="train_anomaly_image" src="https://github.com/user-attachments/assets/74940d4c-0478-45c8-abb8-8d1b7c6d6bb0" />
+
 A portfolio project that shows how train door sensor data can be monitored in real time, checked for anomalies, stored, summarized, and presented through a manager-ready operations dashboard.
 
 The system simulates train door telemetry, streams the readings through Kafka, scores each reading with anomaly detection logic, stores the enriched results in PostgreSQL, and uses Streamlit + Plotly to show live operational status.
