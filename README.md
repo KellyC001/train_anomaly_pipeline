@@ -1,64 +1,84 @@
-# RailOps AI: Train Anomaly Pipeline
+# RailOps AI 🚆
 
 <img width="2816" height="1536" alt="train_anomaly_image" src="https://github.com/user-attachments/assets/74940d4c-0478-45c8-abb8-8d1b7c6d6bb0" />
 
-A portfolio project that shows how train door sensor data can be monitored in real time, checked for anomalies, stored, summarized, and presented through a manager-ready operations dashboard.
+I’ve always been a bit of a nerd about how physical things work. Motors, switches and moving parts are the kind of things that make me stop and wonder, “What would cause this to break?”
 
-The system simulates train door telemetry, streams the readings through Kafka, scores each reading with anomaly detection logic, stores the enriched results in PostgreSQL, and uses Streamlit + Plotly to show live operational status.
+With more everyday machines being fitted with sensors, one question stuck with me: **when a simple motor starts struggling, does it suddenly stop working—or does it leave small clues first?**
 
-## What This Project Does
+Maybe it begins drawing more electricity. Maybe it vibrates more than usual or takes slightly longer to complete the same movement. These changes might not look serious on their own, but could they tell us that something is beginning to go wrong?
 
-This project models a simple railway monitoring workflow:
+I chose a train door as my example. It is basically a door powered by a motor, opening and closing again and again throughout the day. It sounds simple, but when one stops working, it can delay a journey and become a much bigger operational problem.
 
-1. Simulated train door sensor readings are generated.
-2. The readings are streamed into a real-time messaging system.
-3. Each reading is checked for abnormal behaviour.
-4. Results are saved into a database.
-5. Prefect flows create anomaly, data quality, and model health reports.
-6. A dashboard shows recent readings, anomaly status, monitoring health, and diagnostic context.
-7. A FastAPI diagnostic service exposes data that a future LLM agent can summarize.
+I started by creating pretend sensor readings for things like motor current, vibration, voltage and how long the door takes to close. Once I had the readings, the data-science part naturally followed: could I use them to tell the difference between normal behaviour and something worth checking?
 
-The goal is to demonstrate how real-time data pipelines can support condition monitoring, early fault detection, and maintenance decision-making.
+That small question slowly became a much larger investigation. I ended up building a system that generates live readings, looks for unusual behaviour, keeps a history of what happened and shows the results on a dashboard.
+
+> **A quick note about the data:** Everything in this project is simulated. It does not use information from a real train, railway operator or maintenance system.
+
+## What I was curious to find out
+
+- What clues might a motor give us before it stops working?
+- Can sensors help us notice those clues earlier?
+- How do we move readings from a machine into something people can understand?
+- How can we avoid raising an alarm every time a reading looks slightly unusual?
+- What information would actually help someone decide what to inspect?
+
+## What I ended up building
+
+To explore those questions, I built:
+
+- A simulator that creates pretend readings from several train doors
+- A live stream that moves those readings through the system
+- An anomaly check that flags readings that look unusual
+- A database that keeps a history of what happened
+- Health checks to make sure the data and monitoring system are still working
+- A dashboard showing which doors may need attention and why
+- A small diagnostic service that a future AI assistant could use to explain what happened
+
+## A simple example
+
+Imagine that a train door begins taking longer than usual to close, or its motor starts drawing more current than normal.
+
+One odd reading does not automatically mean that the door is broken. The system records the reading, checks whether it looks unusual and shows the surrounding information on the dashboard. Someone investigating the issue can then look at the door’s recent history, see which signal changed and decide whether it is worth inspecting.
+
+That is the main idea behind RailOps AI: use small sensor clues to make an emerging problem easier to notice and understand.
 
 ## Architecture
 
 ![RailOps AI architecture](docs/assets/railops_ai_architecture.svg)
 
-In plain language:
+Once my small motor question grew into a complete system, this is how the pieces fitted together:
 
-- **Producer** creates fake train door sensor readings.
-- **Kafka** acts like a live conveyor belt for messages.
-- **Zookeeper** coordinates Kafka in this local setup.
-- **Consumer** reads messages, runs anomaly detection, and writes enriched results.
-- **PostgreSQL** is the source of truth where processed data is stored.
-- **Prefect** runs scheduled monitoring workflows and writes report snapshots.
-- **Streamlit + Plotly** provide the dashboard and interactive visualizations.
-- **FastAPI** exposes diagnostic tools for recent faults and maintenance context.
-- **Future LLM agent** can call the FastAPI tools and produce plain-English incident summaries.
+- **Producer** creates pretend train-door sensor readings.
+- **Kafka** acts like a live conveyor belt carrying each new reading.
+- **Zookeeper** helps coordinate Kafka in this local setup.
+- **Consumer** picks up the readings, checks them for anomalies and saves the results.
+- **PostgreSQL** keeps the processed readings and becomes the system’s source of truth.
+- **Prefect** runs scheduled checks and creates snapshots for anomalies, data quality and model health.
+- **Streamlit + Plotly** turn the stored results into an interactive operations dashboard.
+- **FastAPI** provides diagnostic tools for recent faults and maintenance context.
+- A **future AI assistant** could use those tools to produce a plain-English incident summary. This part is not fully implemented yet.
 
-## Example Use Case
+## Project components
 
-Imagine a train door begins taking longer than usual to close, or its motor current rises above normal levels.
-
-This pipeline can flag that reading as suspicious and classify it as a possible mechanical, electrical, or operational fault. Maintenance teams could then use the dashboard and diagnostic tools to investigate the issue before it becomes more serious.
-
-## Project Components
+For anyone who wants to look under the hood, these are the main parts of the repository:
 
 | Component | Purpose |
 | --- | --- |
-| `producer.py` | Simulates train door sensor readings |
-| `consumer.py` | Reads the sensor data, checks for anomalies, and saves results |
-| `dashboard.py` | Presents manager-ready anomaly status, monitoring health, telemetry, and diagnostic context |
+| `producer.py` | Simulates train-door sensor readings |
+| `consumer.py` | Reads the sensor data, checks for anomalies and saves the results |
+| `dashboard.py` | Shows anomaly status, monitoring health, telemetry and diagnostic context |
 | `mcp_server.py` | Provides simple diagnostic API endpoints |
-| `src/` | Reusable telemetry, anomaly model, database, reporting, and visualization modules |
-| `tests/` | Tests for telemetry, anomaly scoring, reporting, report loading, and Plotly charts |
-| `docs/ARCHITECTURE.md` | Target portfolio architecture and skill map |
-| `docs/assets/railops_ai_architecture.svg` | Updated architecture slide |
-| `orchestration.py` | Prefect flows for anomaly summaries, model health, and data quality checks |
+| `src/` | Contains reusable telemetry, anomaly model, database, reporting and visualization modules |
+| `tests/` | Tests telemetry, anomaly scoring, reporting, report loading and Plotly charts |
+| `docs/ARCHITECTURE.md` | Explains the target architecture and build phases |
+| `docs/assets/railops_ai_architecture.svg` | Contains the architecture diagram used above |
+| `orchestration.py` | Runs Prefect flows for anomaly summaries, model health and data quality checks |
 | `docker-compose.yaml` | Starts the local Kafka and PostgreSQL services |
-| `requirements.txt` | Lists the Python packages needed |
+| `requirements.txt` | Lists the Python packages needed to run the project |
 
-## How The System Works Now
+## How the system works now
 
 ```text
 Simulated Train Data
@@ -79,7 +99,9 @@ PostgreSQL Database
         +----> Diagnostic API Service
 ```
 
-## Technologies Used
+In simple terms, a pretend sensor reading is created, moved through the live stream, checked and stored. The saved readings can then be used by the scheduled reports, dashboard and diagnostic service without each part needing to talk directly to the simulated train door.
+
+## Tools I used
 
 - Python
 - Apache Kafka
@@ -91,41 +113,41 @@ PostgreSQL Database
 - Prefect
 - Docker Compose
 
-## Dashboard Views
+## Dashboard views
 
-The dashboard is organized around decision needs:
+I organised the dashboard around the questions someone might ask while investigating an issue:
 
-| View | Main Question | Audience |
+| View | Main question | Intended user |
 | --- | --- | --- |
-| Command Center | Are anomalies happening right now, and where should we look first? | Manager / operations lead |
-| Monitoring Health | Can we trust the dashboard and underlying data? | Data analyst / data owner |
-| Telemetry Explorer | What do the detailed sensor readings show? | Analyst / engineer |
-| AI Diagnostics | What tool outputs can a future AI agent use? | AI engineering demo |
+| Command Center | Is anything unusual happening right now, and where should I look first? | Manager / operations lead |
+| Monitoring Health | Can I trust the dashboard and the data behind it? | Data analyst / data owner |
+| Telemetry Explorer | What do the individual sensor readings show? | Analyst / engineer |
+| AI Diagnostics | What evidence could a future AI assistant use to explain the issue? | AI engineering exploration |
 
-The dashboard uses Plotly for:
+The dashboard uses Plotly to show:
 
-- red anomaly markers
-- threshold-aware sensor trends
-- affected-door charts
-- anomaly-type charts
-- door-level anomaly heatmaps
-- model-health feature charts
+- Red anomaly markers
+- Sensor trends with warning thresholds
+- Doors affected by recent anomalies
+- Different anomaly types
+- Door-level anomaly heatmaps
+- Model-health feature charts
 
-## Portfolio Roadmap
+## What I want to explore next
 
-This project is being extended into **RailOps AI**, a portfolio project that showcases:
+This investigation has given me several directions I would like to take further:
 
-- Data science: anomaly detection, feature metrics, model output, and monitoring
-- Data engineering: streaming ingestion, database design, scheduling, and reliability
-- AI engineering: tool-calling diagnostics, RAG, structured outputs, and human review
-- Product thinking: a dashboard and incident workflow that make anomalies actionable
+- **Data science:** Try different ways of detecting anomalies and judging whether the results are actually useful.
+- **Data engineering:** Make the live stream, database and scheduled checks more reliable when something fails.
+- **AI engineering:** Let an AI assistant call the diagnostic tools and turn the evidence into a structured summary, with a person still making the final decision.
+- **Product thinking:** Improve the dashboard and incident flow so that an anomaly leads naturally to the next useful action.
 
-See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for the target architecture and build phases.
-See [docs/PREFECT_ORCHESTRATION.md](docs/PREFECT_ORCHESTRATION.md) for the orchestration runbook.
+See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for the target architecture and build phases.
+See [`docs/PREFECT_ORCHESTRATION.md`](docs/PREFECT_ORCHESTRATION.md) for the orchestration runbook.
 
-## Running The Project Locally
+## Running the project locally
 
-### 1. Install Python Dependencies
+### 1. Install the Python dependencies
 
 ```bash
 python -m venv .venv
@@ -133,7 +155,7 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 2. Configure Environment Variables
+### 2. Configure the environment variables
 
 Create a `.env` file in the project folder with the required database settings:
 
@@ -149,43 +171,43 @@ DASHBOARD_ALERT_WEBHOOK=http://localhost:8501/alert_webhook
 REPORTS_DIR=reports
 ```
 
-### 3. Start Supporting Services
+### 3. Start the supporting services
 
 ```bash
 docker compose up -d
 ```
 
-This starts Kafka, Zookeeper, and PostgreSQL.
+This starts Kafka, Zookeeper and PostgreSQL.
 
-### 4. Start The Consumer
+### 4. Start the consumer
 
 ```bash
 python consumer.py
 ```
 
-This listens to Kafka, scores telemetry, and writes results to PostgreSQL.
+The consumer listens to Kafka, checks the telemetry and writes the results to PostgreSQL.
 
-### 5. Start The Data Producer
+### 5. Start the data producer
 
 ```bash
 python producer.py
 ```
 
-This begins generating simulated train door sensor readings.
+The producer begins generating simulated train-door sensor readings.
 
-### 6. Start The Dashboard
+### 6. Start the dashboard
 
 ```bash
 streamlit run dashboard.py
 ```
 
-### 7. Start The Diagnostic API
+### 7. Start the diagnostic API
 
 ```bash
 uvicorn mcp_server:app --reload --host 0.0.0.0 --port 8000
 ```
 
-### 8. Run Prefect Operations Flows
+### 8. Run the Prefect operations flows
 
 Generate all local operations reports:
 
@@ -209,24 +231,22 @@ python orchestration.py serve
 
 Reports are written as JSON files in the `reports/` folder by default.
 
-After generating reports, refresh the Streamlit dashboard:
+After generating the reports, refresh the Streamlit dashboard:
 
-- **Command Center** shows whether action is needed, how many anomalies were found, and which doors/faults to inspect first.
-- **Monitoring Health** shows whether dashboard data is complete, fresh, and trustworthy.
-- **Telemetry Explorer** shows detailed sensor readings for analyst inspection.
-- **AI Diagnostics** shows API tool outputs that a future LLM agent can summarize.
+- **Command Center** shows whether action is needed, how many anomalies were found and which doors or faults to inspect first.
+- **Monitoring Health** shows whether the dashboard data is complete, recent and trustworthy.
+- **Telemetry Explorer** shows the detailed sensor readings.
+- **AI Diagnostics** shows the API outputs that a future AI assistant could summarize.
 
-The dashboard uses Streamlit for the app layout and Plotly for interactive charts with anomaly markers, threshold lines, door-level heatmaps, and model-health visuals.
+## Honest limitations
 
-## Notes
+- All of the data is generated, so the project cannot prove what a real train-door failure would look like.
+- The anomaly-detection model is trained on simulated examples rather than real maintenance history.
+- A real system would need properly calibrated sensors, stronger testing, security controls and much more careful validation.
+- The AI assistant is not fully implemented. FastAPI currently provides the diagnostic tools that it could call in the future.
+- This project explores how the pieces could work together; it is not a production railway-monitoring system.
 
-This is a demonstration project. The data is simulated, and the anomaly detection model is trained on generated sample data rather than real historical train telemetry.
-
-For a production system, this would need real sensor data, stronger validation, monitoring, security controls, and a properly trained model.
-
-The LLM/AI agent layer is not fully implemented yet. FastAPI currently exposes diagnostic tools that a future agent can call.
-
-## Run Tests
+## Run the tests
 
 ```bash
 pytest
@@ -234,4 +254,4 @@ pytest
 
 ## License
 
-Add your chosen license here.
+A license has not been selected yet.
